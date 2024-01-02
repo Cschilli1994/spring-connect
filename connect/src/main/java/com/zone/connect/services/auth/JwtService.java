@@ -1,4 +1,4 @@
-package com.zone.connect.services;
+package com.zone.connect.services.auth;
 
 import java.security.Key;
 import java.util.Date;

@@ -1,18 +1,11 @@
-import { LoginForm } from "./components/LoginForm";
-import { RegisterForm } from "./components/RegisterForm";
-import { SecuredRequest } from "./components/SecuredRequest";
+import { RouterProvider } from "react-router-dom";
+import { routes } from "./routes";
 
 function App() {
   return (
     <div className="p-4 min-h-screen w-screen flex flex-col">
       <h1>Security App</h1>
-      <LoginForm />
-      <div className="my-3">
-        <SecuredRequest />
-      </div>
-      <div className="my-3 border-2">
-        <RegisterForm />
-      </div>
+      <RouterProvider router={routes} />
     </div>
   );
 }

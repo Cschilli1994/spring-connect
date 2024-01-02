@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.zone.connect.services.JwtService;
+import com.zone.connect.services.auth.JwtService;
 
 import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.FilterChain;
@@ -32,6 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
+
+        String url = request.getRequestURI();
+
+        System.out.println(url);
+        if (!url.contains("api") || url.contains("auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String jwtToken = null;
         final String userEmail;
