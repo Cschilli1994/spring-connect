@@ -2,16 +2,15 @@ import { Fragment } from "react";
 import {
   BriefcaseIcon,
   CalendarIcon,
-  CheckIcon,
   ChevronDownIcon,
   CurrencyDollarIcon,
-  LinkIcon,
   MapPinIcon,
-  PencilIcon,
 } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
 import { useAuthContext } from "../contexts/AuthProvider";
 import { Login } from "./authentication/Login/Login";
+import { Register } from "./authentication/Register/Register";
+import Logout from "./authentication/Logout";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -58,7 +57,16 @@ export const Header = () => {
         </div>
       </div>
       <div className="mt-5 flex lg:ml-4 lg:mt-0">
-        <Login />
+        <>
+          {user ? (
+            <Logout />
+          ) : (
+            <>
+              <Register />
+              <Login />
+            </>
+          )}
+        </>
 
         {/* Dropdown */}
         <Menu as="div" className="relative ml-3 sm:hidden">
