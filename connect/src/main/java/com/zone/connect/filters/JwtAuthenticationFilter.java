@@ -35,7 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String url = request.getRequestURI();
 
-        System.out.println(url);
         if (!url.contains("api") || url.contains("auth")) {
             filterChain.doFilter(request, response);
             return;
@@ -83,6 +82,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                Cookie cookie = new Cookie("jwtToken", "");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
             }
 
         }

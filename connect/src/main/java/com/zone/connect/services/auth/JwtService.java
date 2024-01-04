@@ -17,7 +17,7 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-
+    // TODO this should be an environment
     private static final String SECRET_KEY = "889812ACE9949AC3CF8725889812ACE9949AC3CF8725B9B132CB9B132C";
 
     public String generateToken(UserDetails userDetails) {

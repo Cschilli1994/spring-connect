@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { API_URL } from "../util/settings";
+import { ApiHandler } from "../util/ApiHandler";
 
 type AuthContextValues = {
   user: string;
@@ -17,16 +17,7 @@ export const AuthProvider = ({ children }) => {
 
   async function login(email: string, password: string) {
     setErrors(null);
-    return fetch(`${API_URL}/auth/authenticate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        // Add any other headers if needed
-      },
-      body: JSON.stringify({ email, password }),
-      credentials: "include",
-    })
+    return ApiHandler.post("/auth/authenticate", { email, password })
       .then((resp) => {
         console.log(resp);
         if (resp.ok) {
@@ -45,16 +36,7 @@ export const AuthProvider = ({ children }) => {
 
   async function register(email: string, password: string) {
     setErrors(null);
-    return fetch(`${API_URL}/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        // Add any other headers if needed
-      },
-      body: JSON.stringify({ email, password }),
-      credentials: "include",
-    })
+    return ApiHandler.post("/auth/register", { email, password })
       .then((resp) => {
         console.log(resp);
         if (resp.ok) {
@@ -69,21 +51,25 @@ export const AuthProvider = ({ children }) => {
       });
   }
 
-  function logout() {
-    setUser(null);
-    console.log("Logout");
+  async function logout() {
+    setErrors(null);
+    return ApiHandler.get("/auth/logout")
+      .then((resp) => {
+        console.log(resp);
+        if (resp.ok) {
+          setUser(null);
+        } else {
+          setErrors(resp.statusText);
+        }
+      })
+      .catch((res) => {
+        console.error(res);
+        setErrors("Something went wrong");
+      });
   }
 
   useEffect(() => {
-    fetch(`${API_URL}/auth/ping`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        // Add any other headers if needed
-      },
-      credentials: "include",
-    }).then((resp) => {
+    ApiHandler.get("/auth/ping").then((resp) => {
       if (!resp.ok) {
         setUser(null);
         throw new Error("Session Expired");

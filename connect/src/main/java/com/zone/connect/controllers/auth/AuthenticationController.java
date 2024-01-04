@@ -1,6 +1,7 @@
 package com.zone.connect.controllers.auth;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,19 @@ public class AuthenticationController {
         cookie.setDomain("localhost");
         response.addCookie(cookie);
         return ResponseEntity.ok("Authenticated");
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(
+            HttpServletResponse response) {
+
+        Cookie cookie = new Cookie("jwtToken", "");
+        cookie.setHttpOnly(true); // Set HttpOnly attribute
+        cookie.setPath("/");
+        cookie.setDomain("localhost");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return ResponseEntity.ok("Logged Out");
     }
 
 }
