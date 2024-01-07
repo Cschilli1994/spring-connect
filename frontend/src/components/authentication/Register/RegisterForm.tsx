@@ -8,11 +8,7 @@ type FormData = {
   password: string;
 };
 
-type RegisterFormProps = {
-  afterSubmit: () => void;
-};
-
-export default function RegisterForm({ afterSubmit }: RegisterFormProps) {
+export default function RegisterForm() {
   const {
     register,
     handleSubmit,
@@ -24,11 +20,9 @@ export default function RegisterForm({ afterSubmit }: RegisterFormProps) {
 
   function onSubmit(data: FormData) {
     setIsLoading(true);
-    accountRegister(data.email, data.password)
-      .then(() => {
-        afterSubmit();
-      })
-      .finally(() => setIsLoading(false));
+    accountRegister(data.email, data.password).finally(() =>
+      setIsLoading(false)
+    );
   }
 
   return (

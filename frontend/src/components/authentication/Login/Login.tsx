@@ -1,12 +1,18 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useRef, useState } from "react";
 import LoginForm from "./LoginForm";
+import { useLocation } from "react-router-dom";
 
 export const Login = () => {
   const [open, setOpen] = useState(false);
 
   const cancelButtonRef = useRef(null);
 
+  const { pathname } = useLocation();
+
+  if (pathname.includes("/register")) {
+    return null;
+  }
   return (
     <>
       <span className="sm:ml-3">
@@ -38,7 +44,7 @@ export const Login = () => {
           </Transition.Child>
 
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"

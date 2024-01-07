@@ -7,6 +7,12 @@ type AuthContextValues = {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   errors: string;
+  callSecuredEndpoint: (
+    path: string,
+    method: "POST" | "GET",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    body?: any
+  ) => Promise<Response>;
 };
 
 const AuthContext = createContext<AuthContextValues>(null);
@@ -78,9 +84,33 @@ export const AuthProvider = ({ children }) => {
       }
     });
   }, []);
-
+  async function callSecuredEndpoint(
+    path: string,
+    method: "POST" | "GET",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    body: any = null
+  ) {
+    switch (method) {
+      case "POST":
+        return ApiHandler.post(path, body).then((resp) => {
+          if (resp.status === 403) {
+            setUser(null);
+          }
+          return resp;
+        });
+      case "GET":
+        return ApiHandler.get(path).then((resp) => {
+          if (resp.status === 403) {
+            setUser(null);
+          }
+          return resp;
+        });
+    }
+  }
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, errors }}>
+    <AuthContext.Provider
+      value={{ user, login, register, logout, errors, callSecuredEndpoint }}
+    >
       {children}
     </AuthContext.Provider>
   );
