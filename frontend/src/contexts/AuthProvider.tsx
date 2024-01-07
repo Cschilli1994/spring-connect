@@ -75,12 +75,14 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    ApiHandler.get("/auth/ping").then((resp) => {
+    ApiHandler.get("/user/ping").then((resp) => {
       if (!resp.ok) {
         setUser(null);
         throw new Error("Session Expired");
       } else {
-        // setUser
+        resp.text().then((username) => {
+          setUser(username);
+        });
       }
     });
   }, []);

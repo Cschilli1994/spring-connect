@@ -2,24 +2,21 @@ import { HeartIcon } from "@heroicons/react/20/solid";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../../contexts/AuthProvider";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 type FormData = {
   email: string;
   password: string;
 };
 
-type LoginFormProps = {
-  afterSubmit: () => void;
-};
-
-export default function LoginForm({ afterSubmit }: LoginFormProps) {
+export default function LoginForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
 
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { login, errors: loginError } = useAuthContext();
 
@@ -27,7 +24,7 @@ export default function LoginForm({ afterSubmit }: LoginFormProps) {
     setIsLoading(true);
     login(data.email, data.password)
       .then(() => {
-        afterSubmit();
+        navigate("/menu");
       })
       .finally(() => setIsLoading(false));
   }
