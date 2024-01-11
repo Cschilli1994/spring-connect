@@ -9,16 +9,22 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.zone.connect.entities.User.User;
+import com.zone.connect.entities.User.UserRepository;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
     // TODO this should be an environment
     private static final String SECRET_KEY = "889812ACE9949AC3CF8725889812ACE9949AC3CF8725B9B132CB9B132C";
+    private final UserRepository userRepo;
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
@@ -74,5 +80,11 @@ public class JwtService {
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public User getUser(String token) {
+        String email = extractUsername(token);
+
+        return userRepo.findByEmail(email).orElse(null);
     }
 }
