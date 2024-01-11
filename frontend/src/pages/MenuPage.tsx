@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthProvider";
 import { useEffect } from "react";
 import { Header } from "../components/Header";
+import CreateGame from "../components/StartingGame/CreateGame";
 
 export default function MenuPage() {
   const { user } = useAuthContext();
@@ -18,9 +19,15 @@ export default function MenuPage() {
       <Header />
       MENU PAGE
       <ul>
-        <li className="">Connect 3</li>
-        <li className="">Connect 4</li>
-        <li className="">Connect 5</li>
+        <li className="">
+          <CreateGame goal={3} />
+        </li>
+        <li className="">
+          <CreateGame goal={4} />
+        </li>
+        <li className="">
+          <CreateGame goal={5} />
+        </li>
       </ul>
     </div>
   );
