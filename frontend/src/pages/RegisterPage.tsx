@@ -11,7 +11,7 @@ export const RegisterPage = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate("/menu");
     }
   }, [user]);
   return (
