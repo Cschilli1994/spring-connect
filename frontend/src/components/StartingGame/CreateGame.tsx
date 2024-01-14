@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../contexts/AuthProvider";
+import { Game } from "../../types/Game";
 
 type CreateGameProps = {
   goal: number;
@@ -7,6 +9,8 @@ type CreateGameProps = {
 export default function CreateGame({ goal }: CreateGameProps) {
   const { user, callSecuredEndpoint } = useAuthContext();
 
+  const navigate = useNavigate();
+
   function createGame() {
     callSecuredEndpoint("/game", "POST", {
       goal,
@@ -14,11 +18,12 @@ export default function CreateGame({ goal }: CreateGameProps) {
     })
       .then((resp) => {
         if (resp.ok) {
-          return resp.text();
+          return resp.json();
         }
       })
-      .then((payload) => {
+      .then((payload: { id: number }) => {
         console.log({ payload });
+        navigate(`/game/${payload.id}`);
       })
       .catch((err) => {
         console.log({ err });
