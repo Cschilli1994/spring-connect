@@ -1,6 +1,8 @@
+type BoardValues = 0 | 1 | 2;
+
 export type Game = {
   id: number;
-  board: number[][];
+  board: BoardValues[][];
   playerOneId: number;
   playerTwoId: number;
   status: GameStatus;
