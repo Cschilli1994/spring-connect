@@ -3,6 +3,8 @@ package com.zone.connect.controllers.user;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zone.connect.entities.User.User;
+import com.zone.connect.entities.User.UserRepository;
 import com.zone.connect.services.auth.JwtService;
 
 import jakarta.servlet.http.Cookie;
@@ -18,21 +20,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UserController {
 
     private final JwtService jwtService;
+    private final UserRepository userRepo;
 
     @GetMapping("/ping")
-    public ResponseEntity<String> ping(
+    public ResponseEntity<User> ping(
             HttpServletRequest request) {
 
         Cookie[] cookies = request.getCookies();
 
         for (Cookie cookie : cookies) {
             if ("jwtToken".equals(cookie.getName())) {
-                String user = jwtService.extractUsername(cookie.getValue());
-                return ResponseEntity.ok(user);
+                String username = jwtService.extractUsername(cookie.getValue());
+                User user = userRepo.findByEmail(username).orElseThrow();
+                return ResponseEntity.ok(user.sanitize());
             }
         }
 
-        return ResponseEntity.badRequest().body("Something went wrong");
+        return ResponseEntity.badRequest().body(null);
 
     }
 

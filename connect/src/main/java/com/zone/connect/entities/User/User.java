@@ -28,8 +28,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "_user", uniqueConstraints = @UniqueConstraint(columnNames = { "email" }))
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private String email;
 
@@ -67,6 +67,20 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    private void removePassword() {
+        this.password = null;
+    }
+
+    private void removeRole() {
+        this.role = null;
+    }
+
+    public User sanitize() {
+        removePassword();
+        // removeRole();
+        return this;
     }
 
 }

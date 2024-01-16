@@ -23,7 +23,7 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    public String register(RegisterRequestCredentials credentials) {
+    public AuthenticatedData register(RegisterRequestCredentials credentials) {
 
         var user = User.builder()
                 .email(credentials.getEmail())
@@ -33,11 +33,15 @@ public class AuthenticationService {
 
         repository.save(user);
 
-        return jwtService.generateToken(user);
+        return AuthenticatedData
+                .builder()
+                .token(jwtService.generateToken(user))
+                .user(user.sanitize())
+                .build();
 
     }
 
-    public String authenticate(AuthenticationRequestCredentials credentials) {
+    public AuthenticatedData authenticate(AuthenticationRequestCredentials credentials) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         credentials.getEmail(),
@@ -45,7 +49,11 @@ public class AuthenticationService {
 
         var user = repository.findByEmail(credentials.getEmail()).orElseThrow();
 
-        return jwtService.generateToken(user);
+        return AuthenticatedData
+                .builder()
+                .token(jwtService.generateToken(user))
+                .user(user.sanitize())
+                .build();
 
     }
 }
