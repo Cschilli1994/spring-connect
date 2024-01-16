@@ -42,7 +42,7 @@ public class GameController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GameEntity> getGame(@PathVariable Integer id) {
+    public ResponseEntity<GameEntity> getGame(@PathVariable String id) {
 
         try {
             GameEntity game = gameService.findGameById(id);

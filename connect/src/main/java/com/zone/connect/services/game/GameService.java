@@ -13,7 +13,7 @@ public class GameService {
 
     private final GameRepository gameRepo;
 
-    public GameEntity findGameById(Integer id) {
+    public GameEntity findGameById(String id) {
 
         return gameRepo.findById(id).orElse(null);
     }

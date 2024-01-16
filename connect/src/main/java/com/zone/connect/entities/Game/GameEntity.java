@@ -22,15 +22,15 @@ import lombok.NoArgsConstructor;
 @Table(name = "game")
 public class GameEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Enumerated(EnumType.STRING)
     private GameStatus status;
 
-    private Integer playerOneId;
+    private String playerOneId;
 
-    private Integer playerTwoId;
+    private String playerTwoId;
 
     private Integer turns;
 
