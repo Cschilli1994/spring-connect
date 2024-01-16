@@ -8,7 +8,7 @@ export default function InvitationMenu() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
 
   function getInvitations() {
-    callSecuredEndpoint(`/invitation/${user.id}`, "GET")
+    callSecuredEndpoint(`/invitation/${user?.id}`, "GET")
       .then((resp) => {
         if (resp.ok) {
           return resp.json();

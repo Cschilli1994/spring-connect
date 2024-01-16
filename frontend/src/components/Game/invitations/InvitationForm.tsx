@@ -33,7 +33,7 @@ export default function InvitationForm() {
       })
       .finally(() => setIsLoading(false));
   }
-  if (game.playerTwoId) {
+  if (game?.playerTwoId) {
     return null;
   }
   return (
