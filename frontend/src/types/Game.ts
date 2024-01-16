@@ -1,7 +1,7 @@
 type BoardValues = 0 | 1 | 2;
 
 export type Game = {
-  id: number;
+  id: string;
   board: BoardValues[][];
   playerOneId: number;
   playerTwoId: number;

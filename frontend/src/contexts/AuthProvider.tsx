@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ApiHandler } from "../util/ApiHandler";
+import { User } from "../types/User";
 
 type AuthContextValues = {
-  user: string;
+  user: User;
   logout: () => void;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
@@ -18,7 +19,7 @@ type AuthContextValues = {
 const AuthContext = createContext<AuthContextValues>(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState<User>(null);
   const [errors, setErrors] = useState<string>(null);
 
   async function login(email: string, password: string) {
@@ -27,11 +28,14 @@ export const AuthProvider = ({ children }) => {
       .then((resp) => {
         console.log(resp);
         if (resp.ok) {
-          setUser(email);
+          return resp.json();
         } else {
           setErrors(resp.statusText);
           throw new Error("Failed to Authenticate");
         }
+      })
+      .then((respJson: User) => {
+        setUser(respJson);
       })
       .catch((res) => {
         console.error(res);
@@ -46,10 +50,14 @@ export const AuthProvider = ({ children }) => {
       .then((resp) => {
         console.log(resp);
         if (resp.ok) {
-          setUser(email);
+          return resp.json();
         } else {
           setErrors(resp.statusText);
+          throw new Error("Failed to Register");
         }
+      })
+      .then((respJson: User) => {
+        setUser(respJson);
       })
       .catch((res) => {
         console.error(res);
@@ -75,16 +83,18 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    ApiHandler.get("/user/ping").then((resp) => {
-      if (!resp.ok) {
-        setUser(null);
-        throw new Error("Session Expired");
-      } else {
-        resp.text().then((username) => {
-          setUser(username);
-        });
-      }
-    });
+    ApiHandler.get("/user/ping")
+      .then((resp) => {
+        if (!resp.ok) {
+          setUser(null);
+          throw new Error("Session Expired");
+        } else {
+          return resp.json();
+        }
+      })
+      .then((respJson: User) => {
+        setUser(respJson);
+      });
   }, []);
   async function callSecuredEndpoint(
     path: string,

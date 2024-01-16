@@ -2,6 +2,7 @@ import { useAuthContext } from "../contexts/AuthProvider";
 import { Login } from "./authentication/Login/Login";
 
 import Logout from "./authentication/Logout";
+import InvitationMenu from "./Game/invitations/InvitationMenu";
 import HomeIcon from "./HomeIcon";
 
 export const Header = () => {
@@ -11,8 +12,9 @@ export const Header = () => {
     <div className="grid grid grid-cols-3 w-full">
       <div className="min-w-0 flex-1">
         <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-          {user}
+          {user?.email}
         </h2>
+        <InvitationMenu />
       </div>
       <div className="w-full flex justify-center">
         <HomeIcon />
