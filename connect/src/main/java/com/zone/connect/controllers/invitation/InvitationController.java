@@ -40,7 +40,7 @@ public class InvitationController {
     public ResponseEntity<List<InvitationEntity>> getUsersRecievedInvites(@PathVariable String user) {
 
         try {
-            List<InvitationEntity> invitations = invitationService.getUsersRecievedInvites(user);
+            List<InvitationEntity> invitations = invitationService.getUsersReceivedInvites(user);
 
             return ResponseEntity.ok(invitations);
 
@@ -48,6 +48,19 @@ public class InvitationController {
 
             return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    @PostMapping("/reply")
+    public ResponseEntity replyInvitation(@RequestBody InvitationReplyRequest invitationReply) {
+        try {
+            // TODO: handle exception
+            invitationService.updateStatus(invitationReply.getId(), invitationReply.getStatus());
+            return ResponseEntity.ok(null);
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.badRequest().body(null);
+        }
+
     }
 
 }
