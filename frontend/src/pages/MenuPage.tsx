@@ -3,6 +3,7 @@ import { useAuthContext } from "../contexts/AuthProvider";
 import { useEffect } from "react";
 import { Header } from "../components/Header";
 import CreateGame from "../components/StartingGame/CreateGame";
+import InvitationMenu from "../components/Game/invitations/InvitationMenu";
 
 export default function MenuPage() {
   const { user } = useAuthContext();
@@ -18,6 +19,7 @@ export default function MenuPage() {
     <div className="flex flex-col w-full">
       <Header />
       MENU PAGE
+      <InvitationMenu />
       <ul>
         <li className="">
           <CreateGame goal={3} />
